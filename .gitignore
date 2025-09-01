@@ -78,4 +78,5 @@ $RECYCLE.BIN/
 
 ## Ignore all files in sdk/ except .gitkeep
 sdk/**/*
+!sdk/**/
 !sdk/**/.gitkeep
