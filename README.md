@@ -1,34 +1,43 @@
 # Zoom Video SDK C# Example
 
-A Windows Forms application demonstrating the integration of Zoom Video SDK with C# using a C++/CLI wrapper.
+A Windows Forms and Windows WPF application demonstrating the integration of Zoom Video SDK with C# using a C++/CLI wrapper.
 
 ## 📁 Project Structure
 
 ```
-SkeletonExample_CSharp/
+videosdk-windows-dotnet-desktop-framework-quickstart/
 ├── README.md                     # This file
 ├── ZoomVideoSDK.CSharp.sln      # Visual Studio solution file
 ├── config.json                  # Configuration file
-├── h/                           # Zoom Video SDK header files
-│   ├── zoom_video_sdk_*.h       # Main SDK headers
-│   └── helpers/                 # Helper interface headers
-├── lib/                         # Static libraries
-│   └── videosdk.lib            # Zoom Video SDK static library
-├── dll/                         # Runtime DLLs (copied to output during build)
-│   └── videosdk.dll            # Main SDK runtime library
+├── .gitignore                   # Git ignore rules
+├── sdk/                         # Zoom Video SDK files
+│   ├── x64/
+│   │   ├── h/                   # Header files
+│   │   │   ├── zoom_video_sdk_*.h
+│   │   │   └── helpers/
+│   │   ├── lib/                 # Static libraries
+│   │   │   └── videosdk.lib
+│   │   ├── bin/                 # Runtime DLLs
+│   │   │   └── videosdk.dll
+│   │   └── .gitkeep
+│   └── .gitkeep
 ├── bin/                         # Build output directory
-│   ├── Debug/                   # Debug build outputs
-│   └── Release/                 # Release build outputs
 ├── obj/                         # Intermediate build files
 ├── ZoomVideoSDK.Wrapper/        # C++/CLI wrapper project
 │   ├── ZoomVideoSDK.Wrapper.vcxproj
-│   ├── ZoomSDKManager.h         # Wrapper header
-│   └── ZoomSDKManager.cpp       # Wrapper implementation
-└── ZoomVideoSDK.WinForms/       # C# Windows Forms application
-    ├── ZoomVideoSDK.WinForms.csproj
-    ├── MainForm.cs              # Main application form
-    ├── Program.cs               # Application entry point
-    └── ZoomSDKInterop.cs        # C# interop classes
+│   ├── ZoomSDKManager.h
+│   └── ZoomSDKManager.cpp
+├── ZoomVideoSDK.WinForms/       # C# Windows Forms application
+│   ├── ZoomVideoSDK.WinForms.csproj
+│   ├── MainForm.cs
+│   ├── Program.cs
+│   ├── ZoomSDKInterop.cs
+│   └── libs/                    # Application-specific DLLs
+└── ZoomVideoSDK.WPF/            # C# WPF application
+    ├── ZoomVideoSDK.WPF.csproj
+    ├── MainWindow.xaml
+    ├── MainWindow.xaml.cs
+    └── ZoomSDKInterop.cs
 ```
 
 ## 🚀 Getting Started
@@ -39,7 +48,7 @@ SkeletonExample_CSharp/
 - **.NET Framework 4.8** or later
 - **Windows 10/11** (x64)
 - **C++/CLI support** in Visual Studio
-- **Zoom Video SDK** (headers and libraries included)
+- **Zoom Video SDK** (headers and libraries not included, please download from marketplace.zoom.us)
 
 ### Building the Project
 
@@ -56,21 +65,11 @@ SkeletonExample_CSharp/
    - Press `Ctrl+Shift+B` or use `Build > Build Solution`
    - The build process will:
      - Compile the C++/CLI wrapper
-     - Automatically copy DLLs from `dll/` folder to output directory
-     - Build the C# Windows Forms application
+     - Build the C# Windows Forms and WPF applications
 
 4. **Run the application**:
    - Press `F5` or use `Debug > Start Debugging`
 
-### Alternative Build (Command Line)
-
-```bash
-# Navigate to the project directory
-cd SkeletonExample_CSharp
-
-# Build using MSBuild
-"C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe" ZoomVideoSDK.CSharp.sln /p:Configuration=Debug /p:Platform=x64
-```
 
 ## 🏗️ Architecture
 
@@ -81,12 +80,18 @@ cd SkeletonExample_CSharp
    - Event handling and user interactions
    - Calls into the C++/CLI wrapper
 
-2. **ZoomVideoSDK.Wrapper** (C++/CLI Bridge)
+2. **ZoomVideoSDK.WPF** (C# Application)
+   - Windows Presentation Foundation UI
+   - Modern UI with XAML
+   - Event handling and user interactions
+   - Calls into the C++/CLI wrapper
+
+3. **ZoomVideoSDK.Wrapper** (C++/CLI Bridge)
    - Bridges C# managed code with native Zoom SDK
    - Handles SDK initialization and session management
    - Provides managed interfaces for SDK functionality
 
-3. **Zoom Video SDK** (Native C++)
+4. **Zoom Video SDK** (Native C++)
    - Core video conferencing functionality
    - Audio/video processing
    - Network communication
@@ -94,7 +99,7 @@ cd SkeletonExample_CSharp
 ### Data Flow
 
 ```
-C# UI Layer (WinForms)
+C# UI Layer (WinForms/WPF)
         ↕
 C++/CLI Wrapper Layer
         ↕
@@ -140,29 +145,29 @@ sdkManager.LeaveSession();
 
 The build system automatically handles runtime dependencies:
 
-1. **Pre-build**: Essential DLLs are stored in the `dll/` folder
+1. **Pre-build**: Essential DLLs are stored in the `sdk/x64/bin/` folder
 2. **Post-build**: DLLs are automatically copied to the output directory
 3. **Runtime**: Application finds all dependencies in the same folder
 
 ### Build Events
 
-- **C++ Wrapper Post-Build**: Copies DLLs from `dll/` to `bin/Debug` or `bin/Release`
-- **C# Application Post-Build**: Ensures all dependencies are in the final output directory
+- **C++ Wrapper Post-Build**: Copies DLLs from `sdk/x64/bin/` to `bin/Debug` or `bin/Release`
+- **C# Applications Post-Build**: Ensures all dependencies are in the final output directory
 
 ## 🐛 Troubleshooting
 
 ### Common Issues
 
 1. **Build Error: "Cannot open include file"**
-   - Ensure all header files are in the `h/` folder
+   - Ensure all header files are in the `sdk/x64/h/` folder
    - Check that include paths in the project are correct
 
 2. **Link Error: "Cannot find videosdk.lib"**
-   - Verify `videosdk.lib` is in the `lib/` folder
+   - Verify `videosdk.lib` is in the `sdk/x64/lib/` folder
    - Check library paths in project settings
 
 3. **Runtime Error: "DLL not found"**
-   - Ensure `videosdk.dll` is in the `dll/` folder
+   - Ensure `videosdk.dll` is in the `sdk/x64/bin/` folder
    - Verify post-build events are copying DLLs correctly
 
 4. **Platform Mismatch**
@@ -172,7 +177,7 @@ The build system automatically handles runtime dependencies:
 ### Debug Tips
 
 - Check the build output for post-build event execution
-- Verify DLL copying with: `copy "dll\*.dll" "bin\Debug\" /Y`
+- Verify DLL copying with: `copy "sdk\x64\bin\*.dll" "bin\Debug\" /Y`
 - Use Dependency Walker to check DLL dependencies
 
 ## 📋 Requirements
@@ -201,13 +206,6 @@ The build system automatically handles runtime dependencies:
 
 - [Zoom Video SDK Documentation](https://developers.zoom.us/docs/video-sdk/)
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
 
 ## 📄 License
 
