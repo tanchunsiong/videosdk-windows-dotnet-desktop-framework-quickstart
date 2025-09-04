@@ -1,0 +1,146 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAIN DIALOGEX 0, 0, 800, 600
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Zoom Video SDK Win32 Demo"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    // Session Configuration Group
+    GROUPBOX        "Session Configuration",IDC_STATIC,10,10,380,120
+    LTEXT           "Session Name:",IDC_STATIC,20,30,60,12
+    EDITTEXT        IDC_SESSION_NAME,85,28,280,14,ES_AUTOHSCROLL
+    LTEXT           "Token:",IDC_STATIC,20,50,60,12
+    EDITTEXT        IDC_TOKEN,85,48,280,14,ES_AUTOHSCROLL | ES_PASSWORD
+    LTEXT           "User Name:",IDC_STATIC,20,70,60,12
+    EDITTEXT        IDC_USER_NAME,85,68,280,14,ES_AUTOHSCROLL
+    LTEXT           "Password:",IDC_STATIC,20,90,60,12
+    EDITTEXT        IDC_PASSWORD,85,88,280,14,ES_AUTOHSCROLL | ES_PASSWORD
+    PUSHBUTTON      "Preview Token",IDC_PREVIEW_TOKEN,20,110,80,14
+
+    // Control Buttons Group
+    GROUPBOX        "Session Controls",IDC_STATIC,10,140,380,80
+    PUSHBUTTON      "Join Session",IDC_JOIN_SESSION,20,160,80,20
+    PUSHBUTTON      "Leave Session",IDC_LEAVE_SESSION,110,160,80,20
+    PUSHBUTTON      "Mute Mic",IDC_MUTE_MIC,200,160,60,20
+    PUSHBUTTON      "Mute Speaker",IDC_MUTE_SPEAKER,270,160,70,20
+    PUSHBUTTON      "Start Video",IDC_START_VIDEO,20,185,80,20
+    PUSHBUTTON      "Stop Video",IDC_STOP_VIDEO,110,185,80,20
+
+    // Device Selection Group
+    GROUPBOX        "Device Selection",IDC_STATIC,10,230,380,80
+    LTEXT           "Microphone:",IDC_STATIC,20,250,60,12
+    COMBOBOX        IDC_MICROPHONE,85,248,280,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Speaker:",IDC_STATIC,20,270,60,12
+    COMBOBOX        IDC_SPEAKER,85,268,280,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Camera:",IDC_STATIC,20,290,60,12
+    COMBOBOX        IDC_CAMERA,85,288,280,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+
+    // Video Panels
+    GROUPBOX        "Video Display",IDC_STATIC,400,10,380,300
+    LTEXT           "Self Video",IDC_STATIC,410,25,60,12
+    CONTROL         "",IDC_SELF_VIDEO,"Static",SS_BLACKFRAME | WS_TABSTOP,410,40,170,120
+    LTEXT           "Remote Video",IDC_STATIC,410,170,70,12
+    CONTROL         "",IDC_REMOTE_VIDEO,"Static",SS_BLACKFRAME | WS_TABSTOP,410,185,170,120
+
+    // Status
+    LTEXT           "Status: Ready",IDC_STATUS,10,320,760,20
+END
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About ZoomVideoSDK.Win32"
+FONT 8, "MS Shell Dlg"
+BEGIN
+    ICON            IDI_ZOOMVIDEOSDKWIN32,IDC_MYICON,14,14,20,20
+    LTEXT           "ZoomVideoSDK.Win32, Version 1.0",IDC_STATIC,49,14,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2025",IDC_STATIC,49,26,119,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "ZoomVideoSDK.Win32"
+END
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED

@@ -14,24 +14,48 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZoomVideoSDK.WPF", "ZoomVideoSDK.WPF\ZoomVideoSDK.WPF.csproj", "{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZoomVideoSDK.Win32", "ZoomVideoSDK.Win32\ZoomVideoSDK.Win32.vcxproj", "{12345678-1234-1234-1234-123456789ABC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|x64.ActiveCfg = Debug|x64
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|x64.Build.0 = Debug|x64
+		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|x86.ActiveCfg = Debug|x64
+		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Debug|x86.Build.0 = Debug|x64
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Release|x64.ActiveCfg = Release|x64
 		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Release|x64.Build.0 = Release|x64
+		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Release|x86.ActiveCfg = Release|x64
+		{B2C3D4E5-F6A7-8901-BCDE-F23456789012}.Release|x86.Build.0 = Release|x64
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.ActiveCfg = Debug|x64
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x64.Build.0 = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x86.ActiveCfg = Debug|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Debug|x86.Build.0 = Debug|x64
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.ActiveCfg = Release|x64
 		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x64.Build.0 = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x86.ActiveCfg = Release|x64
+		{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}.Release|x86.Build.0 = Release|x64
 		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Debug|x64.ActiveCfg = Debug|x64
 		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Debug|x64.Build.0 = Debug|x64
+		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Debug|x86.ActiveCfg = Debug|x64
+		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Debug|x86.Build.0 = Debug|x64
 		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Release|x64.ActiveCfg = Release|x64
 		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Release|x64.Build.0 = Release|x64
+		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Release|x86.ActiveCfg = Release|x64
+		{1175AE9C-BF3C-4C80-BBA8-C39F1E81AA7A}.Release|x86.Build.0 = Release|x64
+		{12345678-1234-1234-1234-123456789ABC}.Debug|x64.ActiveCfg = Debug|x64
+		{12345678-1234-1234-1234-123456789ABC}.Debug|x64.Build.0 = Debug|x64
+		{12345678-1234-1234-1234-123456789ABC}.Debug|x86.ActiveCfg = Debug|Win32
+		{12345678-1234-1234-1234-123456789ABC}.Debug|x86.Build.0 = Debug|Win32
+		{12345678-1234-1234-1234-123456789ABC}.Release|x64.ActiveCfg = Release|x64
+		{12345678-1234-1234-1234-123456789ABC}.Release|x64.Build.0 = Release|x64
+		{12345678-1234-1234-1234-123456789ABC}.Release|x86.ActiveCfg = Release|Win32
+		{12345678-1234-1234-1234-123456789ABC}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
