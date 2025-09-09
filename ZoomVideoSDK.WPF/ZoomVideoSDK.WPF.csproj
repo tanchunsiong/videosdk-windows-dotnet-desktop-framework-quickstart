@@ -36,14 +36,6 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if exist &quot;$(SolutionDir)sdk\x64\bin\videosdk.dll&quot; copy &quot;$(SolutionDir)sdk\x64\bin\videosdk.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)sdk\x64\bin\*.dll&quot; copy &quot;$(SolutionDir)sdk\x64\bin\*.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.pdb&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\ZoomVideoSDK.Wrapper.pdb&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="if exist &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; copy &quot;$(SolutionDir)bin\$(Configuration)\*.dll&quot; &quot;$(TargetDir)&quot;" />
-    <Exec Command="echo Copying DLLs from $(SolutionDir)bin\$(Configuration)\ to $(TargetDir)" />
-    <Exec Command="dir &quot;$(SolutionDir)bin\$(Configuration)\&quot;" />
-  </Target>
+
 
 </Project>
