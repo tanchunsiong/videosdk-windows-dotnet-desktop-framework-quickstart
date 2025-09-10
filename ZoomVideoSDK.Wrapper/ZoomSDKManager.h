@@ -73,9 +73,7 @@ namespace ZoomVideoSDKWrapper {
         
         // Audio Controls
         bool MuteAudio(bool mute);
-        bool MuteSpeaker(bool mute);
         bool IsAudioMuted();
-        bool IsSpeakerMuted();
 
         // Video Controls
         bool StartVideo();

@@ -80,3 +80,4 @@ $RECYCLE.BIN/
 sdk/**/*
 !sdk/**/
 !sdk/**/.gitkeep
+/.vscode/settings.json

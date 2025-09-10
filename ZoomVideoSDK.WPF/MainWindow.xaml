@@ -69,7 +69,6 @@
                         <Button Name="LeaveButton" Content="LEAVE SESSION" Width="120" Height="35" Margin="3"
                                 Background="Red" Foreground="White" FontWeight="Bold" FontSize="10"/>
                         <Button Name="MuteMicButton" Content="Mute Mic" Width="100" Height="30" Margin="3"/>
-                        <Button Name="MuteSpeakerButton" Content="Mute Speaker" Width="100" Height="30" Margin="3"/>
                     </WrapPanel>
                 </GroupBox>
                 

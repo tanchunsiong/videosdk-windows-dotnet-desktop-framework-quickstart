@@ -548,77 +548,113 @@ bool ZoomSDKManager::LeaveSession()
     }
 }
 
-// Audio controls
-bool ZoomSDKManager::MuteAudio(bool mute)
+    // Audio controls
+    bool ZoomSDKManager::MuteAudio(bool desiredMuteState)
+    {
+        if (!m_bInitialized) {
+            OnSessionStatusChanged(SessionStatus::Error, "SDK not initialized for audio control");
+            return false;
+        }
+
+        if (!m_pZoomSDK) {
+            OnSessionStatusChanged(SessionStatus::Error, "SDK instance not available for audio control");
+            return false;
+        }
+
+        if (!m_bInSession) {
+            OnSessionStatusChanged(SessionStatus::Error, "Not in session - cannot change microphone state");
+            return false;
+        }
+
+        try {
+            // Get current user (myself)
+            IZoomVideoSDKSession* session = m_pZoomSDK->getSessionInfo();
+            if (!session) {
+                OnSessionStatusChanged(SessionStatus::Error, "Failed to get session info");
+                return false;
+            }
+
+            IZoomVideoSDKUser* currentUser = session->getMyself();
+            if (!currentUser) {
+                OnSessionStatusChanged(SessionStatus::Error, "No current user available for audio control");
+                return false;
+            }
+
+            // Check current audio status first
+            bool currentMuted = IsAudioMuted();
+
+            // If already in desired state, return success (no-op)
+            if (currentMuted == desiredMuteState) {
+                return true;
+            }
+
+            // Get audio helper
+            IZoomVideoSDKAudioHelper* audioHelper = m_pZoomSDK->getAudioHelper();
+            if (!audioHelper) {
+                OnSessionStatusChanged(SessionStatus::Error, "Failed to get audio helper");
+                return false;
+            }
+
+            // Need to change state - call appropriate SDK method with current user object
+            ZoomVideoSDKErrors ret;
+            if (desiredMuteState) {
+                // Want to mute - call muteAudio with current user
+                ret = audioHelper->muteAudio(currentUser);
+            } else {
+                // Want to unmute - call unmuteAudio with current user
+                ret = audioHelper->unMuteAudio(currentUser);
+            }
+
+            if (ret != ZoomVideoSDKErrors_Success) {
+                OnSessionStatusChanged(SessionStatus::Error, "Unable to change microphone state: " + std::to_string((int)ret));
+                return false;
+            }
+
+            OnSessionStatusChanged(SessionStatus::InSession,
+                std::string("Audio ") + (desiredMuteState ? "muted" : "unmuted") + " successfully");
+            return true;
+        }
+        catch (const std::exception& e) {
+            OnSessionStatusChanged(SessionStatus::Error, "Exception during audio control: " + std::string(e.what()));
+            return false;
+        }
+        catch (...) {
+            OnSessionStatusChanged(SessionStatus::Error, "Unknown exception during audio control");
+            return false;
+        }
+    }
+
+bool ZoomSDKManager::IsAudioMuted()
 {
-    if (!m_bInitialized) {
-        OnSessionStatusChanged(SessionStatus::Error, "SDK not initialized for audio control");
-        return false;
-    }
-
-    if (!m_pZoomSDK) {
-        OnSessionStatusChanged(SessionStatus::Error, "SDK instance not available for audio control");
-        return false;
-    }
-
-    if (!m_bInSession) {
-        OnSessionStatusChanged(SessionStatus::Error, "Not in session - cannot change microphone state");
+    if (!m_bInitialized || !m_pZoomSDK || !m_bInSession) {
         return false;
     }
 
     try {
-        // Get audio helper
-        IZoomVideoSDKAudioHelper* audioHelper = m_pZoomSDK->getAudioHelper();
-        if (!audioHelper) {
-            OnSessionStatusChanged(SessionStatus::Error, "Failed to get audio helper");
-            return false;
-        }
-
         // Get session info to access current user
         IZoomVideoSDKSession* session = m_pZoomSDK->getSessionInfo();
         if (!session) {
-            OnSessionStatusChanged(SessionStatus::Error, "Failed to get session info for audio control");
             return false;
         }
 
         // Get current user (myself)
         IZoomVideoSDKUser* currentUser = session->getMyself();
         if (!currentUser) {
-            OnSessionStatusChanged(SessionStatus::Error, "Failed to get current user for audio control");
             return false;
         }
 
-        // Mute/unmute audio using actual SDK call with proper user parameter
-        ZoomVideoSDKErrors ret;
-        if (mute) {
-            ret = audioHelper->muteAudio(currentUser);
-        } else {
-            ret = audioHelper->unMuteAudio(currentUser);
-        }
-        
-        if (ret != ZoomVideoSDKErrors_Success) {
-            OnSessionStatusChanged(SessionStatus::Error, "Unable to change microphone state: " + std::to_string((int)ret));
-            return false;
-        }
-
-        OnSessionStatusChanged(SessionStatus::InSession,
-            std::string("Audio ") + (mute ? "muted" : "unmuted") + " successfully");
-        return true;
+        // Get audio status from user object
+        ZoomVideoSDKAudioStatus audioStatus = currentUser->getAudioStatus();
+        return audioStatus.isMuted;
     }
     catch (const std::exception& e) {
-        OnSessionStatusChanged(SessionStatus::Error, "Exception during audio control: " + std::string(e.what()));
+        // Handle exceptions gracefully
         return false;
     }
     catch (...) {
-        OnSessionStatusChanged(SessionStatus::Error, "Unknown exception during audio control");
+        // Handle unknown exceptions gracefully
         return false;
     }
-}
-
-bool ZoomSDKManager::IsAudioMuted()
-{
-    // Simplified - would need to query actual SDK state
-    return false;
 }
 
 // Video controls
@@ -702,7 +738,41 @@ bool ZoomSDKManager::StopVideo()
 
 bool ZoomSDKManager::IsVideoStarted()
 {
-    return m_bVideoStarted;
+    if (!m_bInitialized || !m_pZoomSDK || !m_bInSession) {
+        return false;
+    }
+
+    try {
+        // Get session info to access current user
+        IZoomVideoSDKSession* session = m_pZoomSDK->getSessionInfo();
+        if (!session) {
+            return false;
+        }
+
+        // Get current user (myself)
+        IZoomVideoSDKUser* currentUser = session->getMyself();
+        if (!currentUser) {
+            return false;
+        }
+
+        // Get user's video pipe
+        IZoomVideoSDKRawDataPipe* videoPipe = currentUser->GetVideoPipe();
+        if (!videoPipe) {
+            return false;
+        }
+
+        // Check video status
+        ZoomVideoSDKVideoStatus videoStatus = videoPipe->getVideoStatus();
+        return videoStatus.isOn;
+    }
+    catch (const std::exception& e) {
+        // Handle exceptions gracefully
+        return false;
+    }
+    catch (...) {
+        // Handle unknown exceptions gracefully
+        return false;
+    }
 }
 
 // Video preview and rendering

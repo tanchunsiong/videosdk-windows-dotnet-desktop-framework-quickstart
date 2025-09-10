@@ -374,7 +374,7 @@ namespace ZoomVideoSDKWrapper {
     }
 
     // Audio controls with real implementation
-    bool ZoomSDKManager::MuteAudio(bool mute)
+    bool ZoomSDKManager::MuteAudio(bool desiredMuteState)
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
@@ -384,51 +384,59 @@ namespace ZoomVideoSDKWrapper {
         if (!audioHelper)
             return false;
 
-        // muteAudio requires a user pointer, pass nullptr for current user
-        ZoomVideoSDKErrors ret = audioHelper->muteAudio(nullptr);
-        return ret == ZoomVideoSDKErrors_Success;
-    }
-
-    bool ZoomSDKManager::MuteSpeaker(bool mute)
-    {
-        if (!m_bInitialized || !m_pVideoSDK)
+        // Get current user (myself)
+        IZoomVideoSDKSession* session = pSDK->getSessionInfo();
+        if (!session)
             return false;
 
-        IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
-        IZoomVideoSDKAudioHelper* audioHelper = pSDK->getAudioHelper();
-        if (!audioHelper)
+        IZoomVideoSDKUser* currentUser = session->getMyself();
+        if (!currentUser)
             return false;
 
-        // Note: The actual API doesn't have muteSpeaker, this is a placeholder
-        return false; // Not supported in current API
+        // Check current audio status first
+        bool currentMuted = IsAudioMuted();
+
+        // If already in desired state, return success (no-op)
+        if (currentMuted == desiredMuteState) {
+            return true;
+        }
+
+        // Need to change state - call appropriate SDK method with current user object
+        ZoomVideoSDKErrors ret;
+        if (desiredMuteState) {
+            // Want to mute - call muteAudio with current user
+            ret = audioHelper->muteAudio(currentUser);
+        } else {
+            // Want to unmute - call unmuteAudio with current user
+            ret = audioHelper->unMuteAudio(currentUser);
+        }
+
+        return (ret == ZoomVideoSDKErrors_Success);
     }
+
 
     bool ZoomSDKManager::IsAudioMuted()
     {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
 
-        IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
-        IZoomVideoSDKAudioHelper* audioHelper = pSDK->getAudioHelper();
-        if (!audioHelper)
+        try {
+            // Get current user
+            void* currentUser = GetCurrentUser();
+            if (!currentUser)
+                return false;
+
+            IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(currentUser);
+            if (!pUser)
+                return false;
+
+            // Get audio status from user object
+            ZoomVideoSDKAudioStatus audioStatus = pUser->getAudioStatus();
+            return audioStatus.isMuted;
+        }
+        catch (...) {
             return false;
-
-        // Note: The actual API doesn't have isAudioMuted, this is a placeholder
-        return false; // Not supported in current API
-    }
-
-    bool ZoomSDKManager::IsSpeakerMuted()
-    {
-        if (!m_bInitialized || !m_pVideoSDK)
-            return false;
-
-        IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
-        IZoomVideoSDKAudioHelper* audioHelper = pSDK->getAudioHelper();
-        if (!audioHelper)
-            return false;
-
-        // Note: The actual API doesn't have isSpeakerMuted, this is a placeholder
-        return false; // Not supported in current API
+        }
     }
 
     // Video controls - FIXED TO PREVENT REPEATED STARTS
@@ -506,13 +514,28 @@ namespace ZoomVideoSDKWrapper {
         if (!m_bInitialized || !m_pVideoSDK)
             return false;
 
-        IZoomVideoSDK* pSDK = static_cast<IZoomVideoSDK*>(m_pVideoSDK);
-        IZoomVideoSDKVideoHelper* videoHelper = pSDK->getVideoHelper();
-        if (!videoHelper)
-            return false;
+        try {
+            // Get current user
+            void* currentUser = GetCurrentUser();
+            if (!currentUser)
+                return false;
 
-        // Note: The actual API doesn't have isVideoOn, this is a placeholder
-        return false; // Not supported in current API
+            IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(currentUser);
+            if (!pUser)
+                return false;
+
+            // Get user's video pipe
+            IZoomVideoSDKRawDataPipe* videoPipe = pUser->GetVideoPipe();
+            if (!videoPipe)
+                return false;
+
+            // Check video status
+            ZoomVideoSDKVideoStatus videoStatus = videoPipe->getVideoStatus();
+            return videoStatus.isOn;
+        }
+        catch (...) {
+            return false;
+        }
     }
 
     // Video Status Checking Methods (as per blog post)
@@ -525,6 +548,7 @@ namespace ZoomVideoSDKWrapper {
             IZoomVideoSDKUser* pUser = static_cast<IZoomVideoSDKUser*>(user);
             if (!pUser)
                 return false;
+                
 
             // Get user's video pipe
             IZoomVideoSDKRawDataPipe* videoPipe = pUser->GetVideoPipe();

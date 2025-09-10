@@ -16,7 +16,6 @@ namespace ZoomVideoSDK.WinForms
         private ZoomSDKInterop _zoomSDK;
         private bool _isInSession = false;
         private bool _isMicMuted = false;
-        private bool _isSpeakerMuted = false;
         private bool _isVideoStarted = false;
         
         // Frame rate throttling for smooth video
@@ -176,12 +175,10 @@ namespace ZoomVideoSDK.WinForms
             _leaveButton.Enabled = _isInSession;
             
             _muteMicButton.Enabled = _isInSession;
-            _muteSpeakerButton.Enabled = _isInSession;
             _startVideoButton.Enabled = _isInSession && !_isVideoStarted;
             _stopVideoButton.Enabled = _isInSession && _isVideoStarted;
             
             _muteMicButton.Text = _isMicMuted ? "Unmute Mic" : "Mute Mic";
-            _muteSpeakerButton.Text = _isSpeakerMuted ? "Unmute Speaker" : "Mute Speaker";
         }
 
         private void UpdateStatus(string message)
@@ -632,7 +629,10 @@ namespace ZoomVideoSDK.WinForms
                     return;
                 }
 
-                bool newMuteState = !_isMicMuted;
+                // Check current audio mute status before toggling
+                bool isCurrentlyMuted = _zoomSDK.IsAudioMuted();
+                bool newMuteState = !isCurrentlyMuted;
+
                 if (_zoomSDK.MuteAudio(newMuteState))
                 {
                     _isMicMuted = newMuteState;
@@ -647,33 +647,11 @@ namespace ZoomVideoSDK.WinForms
             catch (Exception ex)
             {
                 UpdateStatus("Error controlling microphone");
-                MessageBox.Show($"Error controlling microphone: {ex.Message}", "Error", 
+                MessageBox.Show($"Error controlling microphone: {ex.Message}", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void MuteSpeakerButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (_zoomSDK == null || !_zoomSDK.IsInSession)
-                {
-                    UpdateStatus("Not in session");
-                    return;
-                }
-
-                // Note: Speaker mute functionality would need to be implemented in the SDK wrapper
-                _isSpeakerMuted = !_isSpeakerMuted;
-                UpdateButtonStates();
-                UpdateStatus(_isSpeakerMuted ? "Speaker muted" : "Speaker unmuted");
-            }
-            catch (Exception ex)
-            {
-                UpdateStatus("Error controlling speaker");
-                MessageBox.Show($"Error controlling speaker: {ex.Message}", "Error", 
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
 
         private void StartVideoButton_Click(object sender, EventArgs e)
         {

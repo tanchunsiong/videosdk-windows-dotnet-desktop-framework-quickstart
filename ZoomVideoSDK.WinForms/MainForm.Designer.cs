@@ -46,7 +46,6 @@ namespace ZoomVideoSDK.WinForms
             this._joinButton = new System.Windows.Forms.Button();
             this._leaveButton = new System.Windows.Forms.Button();
             this._muteMicButton = new System.Windows.Forms.Button();
-            this._muteSpeakerButton = new System.Windows.Forms.Button();
             this._videoGroup = new System.Windows.Forms.GroupBox();
             this.videoFlowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this._startVideoButton = new System.Windows.Forms.Button();
@@ -244,7 +243,6 @@ namespace ZoomVideoSDK.WinForms
             this.audioFlowLayoutPanel.Controls.Add(this._joinButton);
             this.audioFlowLayoutPanel.Controls.Add(this._leaveButton);
             this.audioFlowLayoutPanel.Controls.Add(this._muteMicButton);
-            this.audioFlowLayoutPanel.Controls.Add(this._muteSpeakerButton);
             this.audioFlowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.audioFlowLayoutPanel.Location = new System.Drawing.Point(10, 23);
             this.audioFlowLayoutPanel.Name = "audioFlowLayoutPanel";
@@ -300,15 +298,6 @@ namespace ZoomVideoSDK.WinForms
             this._muteMicButton.UseVisualStyleBackColor = true;
             this._muteMicButton.Click += new System.EventHandler(this.MuteMicButton_Click);
             // 
-            // _muteSpeakerButton
-            // 
-            this._muteSpeakerButton.Location = new System.Drawing.Point(235, 44);
-            this._muteSpeakerButton.Name = "_muteSpeakerButton";
-            this._muteSpeakerButton.Size = new System.Drawing.Size(100, 30);
-            this._muteSpeakerButton.TabIndex = 4;
-            this._muteSpeakerButton.Text = "Mute Speaker";
-            this._muteSpeakerButton.UseVisualStyleBackColor = true;
-            this._muteSpeakerButton.Click += new System.EventHandler(this.MuteSpeakerButton_Click);
             // 
             // _videoGroup
             // 
@@ -577,7 +566,6 @@ namespace ZoomVideoSDK.WinForms
         private System.Windows.Forms.Button _joinButton;
         private System.Windows.Forms.Button _leaveButton;
         private System.Windows.Forms.Button _muteMicButton;
-        private System.Windows.Forms.Button _muteSpeakerButton;
         private System.Windows.Forms.GroupBox _videoGroup;
         private System.Windows.Forms.FlowLayoutPanel videoFlowLayoutPanel;
         private System.Windows.Forms.Button _startVideoButton;

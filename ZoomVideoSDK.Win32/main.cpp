@@ -16,7 +16,6 @@ HINSTANCE hInst;                                // current instance
 // Application state
 bool g_bInSession = false;
 bool g_bMicMuted = false;
-bool g_bSpeakerMuted = false;
 bool g_bVideoStarted = false;
 
 // SDK Manager
@@ -159,9 +158,13 @@ INT_PTR CALLBACK MainDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 
             case IDC_MUTE_MIC:
                 {
+                    // Check current audio mute status before toggling
+                    bool isCurrentlyMuted = g_pSDKManager ? g_pSDKManager->IsAudioMuted() : false;
+                    bool newMuteState = !isCurrentlyMuted;
+
                     // Call SDK manager to mute/unmute audio
-                    if (g_pSDKManager && g_pSDKManager->MuteAudio(!g_bMicMuted)) {
-                        g_bMicMuted = !g_bMicMuted;
+                    if (g_pSDKManager && g_pSDKManager->MuteAudio(newMuteState)) {
+                        g_bMicMuted = newMuteState;
                         UpdateButtonStates(hDlg);
                         UpdateStatus(hDlg, g_bMicMuted ? "Microphone muted" : "Microphone unmuted");
                     } else {
@@ -170,14 +173,6 @@ INT_PTR CALLBACK MainDialogProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
                 }
                 break;
 
-            case IDC_MUTE_SPEAKER:
-                {
-                    // For speaker mute, we'll just toggle the state since the SDK simplified implementation doesn't support it
-                    g_bSpeakerMuted = !g_bSpeakerMuted;
-                    UpdateButtonStates(hDlg);
-                    UpdateStatus(hDlg, g_bSpeakerMuted ? "Speaker muted" : "Speaker unmuted");
-                }
-                break;
 
             case IDC_START_VIDEO:
                 {
@@ -298,13 +293,11 @@ void UpdateButtonStates(HWND hDlg)
 
     // Control buttons
     EnableWindow(GetDlgItem(hDlg, IDC_MUTE_MIC), g_bInSession);
-    EnableWindow(GetDlgItem(hDlg, IDC_MUTE_SPEAKER), g_bInSession);
     EnableWindow(GetDlgItem(hDlg, IDC_START_VIDEO), g_bInSession && !g_bVideoStarted);
     EnableWindow(GetDlgItem(hDlg, IDC_STOP_VIDEO), g_bInSession && g_bVideoStarted);
 
     // Update button text
     SetDlgItemText(hDlg, IDC_MUTE_MIC, g_bMicMuted ? L"Unmute Mic" : L"Mute Mic");
-    SetDlgItemText(hDlg, IDC_MUTE_SPEAKER, g_bSpeakerMuted ? L"Unmute Speaker" : L"Mute Speaker");
 }
 
 void PopulateDeviceLists(HWND hDlg)
