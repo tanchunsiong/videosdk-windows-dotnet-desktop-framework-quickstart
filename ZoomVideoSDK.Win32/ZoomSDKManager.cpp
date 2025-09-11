@@ -485,7 +485,7 @@ bool ZoomSDKManager::JoinSession(const std::string& sessionName, const std::stri
         sessionContext.sessionPassword = wPassword.empty() ? nullptr : wPassword.c_str();
 
         // Configure session options
-        sessionContext.videoOption.localVideoOn = true;
+        sessionContext.videoOption.localVideoOn = false;
         sessionContext.audioOption.connect = true;
         sessionContext.audioOption.mute = false;
 

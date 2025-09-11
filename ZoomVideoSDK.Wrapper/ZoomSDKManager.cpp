@@ -339,7 +339,7 @@ namespace ZoomVideoSDKWrapper {
             sessionContext.userName = nativeUserName.c_str();
             sessionContext.token = nativeToken.c_str();
             sessionContext.sessionPassword = nativePassword.empty() ? nullptr : nativePassword.c_str();
-            sessionContext.videoOption.localVideoOn = true;  // Enable video transmission
+            sessionContext.videoOption.localVideoOn = false;  // Disable automatic video transmission
             sessionContext.audioOption.connect = true;
             sessionContext.audioOption.mute = false;
 
